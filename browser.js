@@ -5,7 +5,14 @@ function oldBrowser () {
 }
 
 var Buffer = require('safe-buffer').Buffer
-var crypto = global.crypto || global.msCrypto
+var crypto = global.crypto || global.msCrypto || {
+  getRandomValues: function(array) {
+    for (var i = 0, l = array.length; i < l; i++) {
+      array[i] = Math.floor(Math.random() * 256);
+    }
+    return array;
+  }
+}
 
 if (crypto && crypto.getRandomValues) {
   module.exports = randomBytes
